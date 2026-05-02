@@ -1,4 +1,4 @@
 # XR-development
 
 link naar folder waar mijn scripts zich bevinden:
-[XR - Game/Assets/MyFiles/Scripts](url)
+[link](XR%20-%20Game/Assets/MyFiles/Scripts)
