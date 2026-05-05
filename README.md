@@ -4,7 +4,7 @@ link naar folder waar mijn scripts zich bevinden:
 [link](XR%20-%20Game/Assets/MyFiles/Scripts)
 
 
-## Spelbescrhijving:
+## Spelbeschrijving:
 De speler is in een soort doolhofachtig klas lokaal 
 er is een leerkracht robot enemy dat achter je na zit en als hij te dicht in de buurt komt ben je dood (dus je moet je verstoppen of weg rennen)
 
