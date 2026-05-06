@@ -8,6 +8,8 @@ public class Agent : MonoBehaviour
     public float detectionRange = 10f;
     public float viewDotThreshold = 0.3f;
 
+    
+
     private State currentState;
 
     [HideInInspector] public Renderer rend;
