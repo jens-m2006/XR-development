@@ -11,7 +11,7 @@ public class ChaseState : State
 
     public override void Update()
     {
-        agent.LookAtPlayer();
+        // Eenmaal gedetecteerd — gewoon achtervolgen, geen vision check meer
         agent.MoveTowards(agent.player.position);
 
         if (agent.DistanceToPlayer() > agent.detectionRange && !agent.IsInDarkZone())
