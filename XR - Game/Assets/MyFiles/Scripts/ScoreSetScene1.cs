@@ -17,7 +17,7 @@ public class ScoreSetScene1 : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-           SceneManager.LoadScene("Scene2"); 
+           SceneManager.LoadScene("TestScene2"); 
         }
     
         
