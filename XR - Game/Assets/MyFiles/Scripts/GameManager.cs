@@ -12,18 +12,15 @@ public class GameManager : MonoBehaviour
     public int score = 10;
 
 
-
-
-    void Start()
-    {
+    if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
+  
 
     
 }
