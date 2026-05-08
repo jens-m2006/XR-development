@@ -11,7 +11,13 @@ public class Oefenen : MonoBehaviour
     public GameObject[] enemies;
     public Color playerColor;
 
+    public Vector3 Startvector;
+
     
+
+
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
