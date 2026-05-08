@@ -3,6 +3,7 @@ using UnityEngine.AI;
 
 public class Agent : MonoBehaviour
 {
+    // fields ------------------
     public Transform player;
     public Transform[] waypoints;
     public float detectionRange = 10f;
@@ -15,15 +16,18 @@ public class Agent : MonoBehaviour
 
     private State currentState;
     private NavMeshAgent navAgent;
-    [HideInInspector] public Renderer rend;
+    [HideInInspector] public Renderer rend; // For hiding the field in the inspecor while being public
     
     private int currentWaypointIndex = 0;
     private float chaseTimer = 0f;
 
+
+
+    // start------------
     void Start()
     {
-        rend = GetComponent<Renderer>();
-        navAgent = GetComponent<NavMeshAgent>();
+        rend = GetComponent<Renderer>(); // render component for changing  color
+        navAgent = GetComponent<NavMeshAgent>(); // Component for the navmesh
         ChangeState(new PatrolState(this));
     }
 
@@ -50,6 +54,7 @@ public class Agent : MonoBehaviour
         }
     }
 
+    // checks eerst hoe ver weg en daarna of binnen gezichtsveld en daanra of er geen muur tussne zit
     public float DistanceToPlayer()
     {
         return Vector3.Distance(transform.position, player.position);
@@ -76,6 +81,15 @@ public class Agent : MonoBehaviour
         return false;
     }
 
+
+
+
+
+
+
+
+
+    // movemnts =========================
     public void MoveTowards(Vector3 target)
     {
         navAgent.isStopped = false;
@@ -98,7 +112,10 @@ public class Agent : MonoBehaviour
         if (waypoint == null) return;
 
         MoveTowards(waypoint.position);
-        if (Vector3.Distance(transform.position, waypoint.position) >= waypointDistance) return;
+        if (Vector3.Distance(transform.position, waypoint.position) >= waypointDistance) 
+        {
+            return;
+        }
 
         currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
         ResetBattery();
@@ -111,7 +128,9 @@ public class Agent : MonoBehaviour
         foreach (Transform waypoint in waypoints)
         {
             if (waypoint != null && Vector3.Distance(transform.position, waypoint.position) < checkpointDistance)
+            {
                 return true;
+            }
         }
 
         return false;
@@ -119,7 +138,10 @@ public class Agent : MonoBehaviour
 
     public Transform GetBestFleeWaypoint()
     {
-        if (waypoints == null || waypoints.Length == 0) return null;
+        if (waypoints == null || waypoints.Length == 0) 
+        {
+            return null;
+        }
 
         Vector3 awayFromPlayer = transform.position - player.position;
         awayFromPlayer.y = 0f;
@@ -130,7 +152,10 @@ public class Agent : MonoBehaviour
 
         foreach (Transform waypoint in waypoints)
         {
-            if (waypoint == null) continue;
+            if (waypoint == null) 
+            {
+                continue;
+            }
 
             Vector3 toWaypoint = waypoint.position - transform.position;
             toWaypoint.y = 0f;
@@ -148,17 +173,35 @@ public class Agent : MonoBehaviour
         return bestWaypoint;
     }
 
-    public void ResetBattery() => battery = maxBattery;
-    public void DrainBattery() => battery = 0f;
-    public bool IsBatteryEmpty() => battery <= 0f;
+
+    public void ResetBattery() 
+    {
+        battery = maxBattery;
+    }
+
+    public void DrainBattery() 
+    {
+        battery = 0f;
+    }
+
+    public bool IsBatteryEmpty() 
+    {
+        return battery <= 0f;
+    }
 
     public void UpdateChaseTimer(float deltaTime)
     {
         chaseTimer += deltaTime;
-        if (chaseTimer >= chaseTimeToDrain) DrainBattery();
+        if (chaseTimer >= chaseTimeToDrain) 
+        {
+            DrainBattery();
+        }
     }
 
-    public void ResetChaseTimer() => chaseTimer = 0f;
+    public void ResetChaseTimer()
+    {
+        chaseTimer = 0f;
+    }
 
     public Vector3 GetFleeDestination()
     {
