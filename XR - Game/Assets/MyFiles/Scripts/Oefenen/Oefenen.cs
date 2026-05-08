@@ -1,3 +1,4 @@
+using UnityEngine;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -11,7 +12,10 @@ public class Oefenen : MonoBehaviour
     public GameObject[] enemies;
     public Color playerColor;
 
-    public Vector3 Startvector;
+    public Vector3 test = new Vector3(1f,1f,1f); // dit is de start locatie
+
+
+    
 
     
 
@@ -21,6 +25,7 @@ public class Oefenen : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        object1.transform.position = test;
         
     }
 
