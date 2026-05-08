@@ -1,17 +1,18 @@
 using UnityEngine;
 
-public class IdleState : State
+public class PatrolState : State
 {
-    public IdleState(Agent agent) : base(agent) { }
+    public PatrolState(Agent agent) : base(agent) { }
 
     public override void Enter()
     {
-        agent.rend.material.color = Color.green;
-        agent.StopMoving();
+        agent.rend.material.color = Color.blue;
     }
 
     public override void Update()
     {
+        agent.MoveToNextWaypoint();
+
         if (agent.DistanceToPlayer() < agent.detectionRange && agent.CanSeePlayer())
         {
             agent.ChangeState(new ChaseState(agent));

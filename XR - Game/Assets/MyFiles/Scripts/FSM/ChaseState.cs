@@ -7,16 +7,23 @@ public class ChaseState : State
     public override void Enter()
     {
         agent.rend.material.color = Color.red;
+        agent.ResetChaseTimer();
     }
 
     public override void Update()
     {
-        // Eenmaal gedetecteerd — gewoon achtervolgen, geen vision check meer
         agent.MoveTowards(agent.player.position);
+        agent.UpdateChaseTimer(Time.deltaTime);
 
-        if (agent.DistanceToPlayer() > agent.detectionRange && !agent.IsInDarkZone())
+        if (agent.IsBatteryEmpty())
         {
-            agent.ChangeState(new IdleState(agent));
+            agent.ChangeState(new FleeState(agent));
+            return;
+        }
+
+        if (agent.DistanceToPlayer() > agent.detectionRange)
+        {
+            agent.ChangeState(new PatrolState(agent));
         }
     }
 }

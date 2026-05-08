@@ -61,12 +61,14 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 							singleton = new GameObject();
 							_instance = singleton.AddComponent<T>();
 						}
+						
+						Debug.Log("");
 						singleton.name = "(singleton) " + typeof(T).ToString();
-						DontDestroyOnLoad(singleton);
+						//DontDestroyOnLoad(singleton);
 
-						// Debug.Log("[Singleton] An instance of " + typeof(T) + 
-						// 	" is needed in the scene, so '" + singleton +
-						// 	"' was created with DontDestroyOnLoad.");
+						Debug.Log("[Singleton] An instance of " + typeof(T) + 
+							" is needed in the scene, so '" + singleton +
+							"' was created with DontDestroyOnLoad.");
 					}
 					else
 					{
