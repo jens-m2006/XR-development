@@ -6,6 +6,7 @@ public class Oefenen : MonoBehaviour
     
     
     [SerializeField] private GameObject object1;
+    public float points = 3;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
