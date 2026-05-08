@@ -14,6 +14,8 @@ public class Oefenen : MonoBehaviour
 
     public Vector3 test = new Vector3(1f,1f,1f); // dit is de start locatie
 
+    //test
+
 
     
 
