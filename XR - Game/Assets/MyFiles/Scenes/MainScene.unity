@@ -7398,7 +7398,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &199007028
 MonoBehaviour:
@@ -27879,10 +27879,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f57474741076aa1449e1bcb6f17017de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  menuCamera: {fileID: 0}
-  menuUICanvas: {fileID: 0}
-  vrPlayerRig: {fileID: 879829840}
+  mainMenuCanvas: {fileID: 1639666418}
+  settingsMenuCanvas: {fileID: 32444823}
   gameplayWorld: {fileID: 908816505}
+  <Data>k__BackingField:
+    lastScore: 0
+    timesWon: 0
+    timesLost: 0
+    highScore: 0
+    isMusicOn: 1
+    isSfxOn: 1
+  <IsInMenu>k__BackingField: 1
 --- !u!1 &805505228
 GameObject:
   m_ObjectHideFlags: 0
@@ -53967,8 +53974,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -5, y: 0}
-  m_SizeDelta: {x: -20, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1583176754
 GameObject:
@@ -55063,6 +55070,7 @@ MonoBehaviour:
   canvasDoelObject: {fileID: 79867625}
   laadSlider: {fileID: 423856276}
   laadTijd: 2
+  menuSceneNaam: MainMenu
 --- !u!4 &1621452357
 Transform:
   m_ObjectHideFlags: 0
