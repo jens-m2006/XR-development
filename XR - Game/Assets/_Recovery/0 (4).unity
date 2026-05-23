@@ -27880,7 +27880,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   menuCamera: {fileID: 0}
-  menuUICanvas: {fileID: 0}
+  mainMenuCanvas: {fileID: 0}
+  settingsMenuCanvas: {fileID: 0}
   vrPlayerRig: {fileID: 879829840}
   gameplayWorld: {fileID: 908816505}
 --- !u!1 &805505228
@@ -55060,9 +55061,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 786eda1024f27b144ab5d55052b6b205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonHandler
-  canvasDoelObject: {fileID: 79867625}
-  laadSlider: {fileID: 423856276}
-  laadTijd: 2
+  canvasObject: {fileID: 79867625}
+  loadingSlider: {fileID: 423856276}
+  holdTime: 2
 --- !u!4 &1621452357
 Transform:
   m_ObjectHideFlags: 0
@@ -72763,6 +72764,7 @@ MonoBehaviour:
   resetStatsButton: {fileID: 1304760299}
   saveBackButton: {fileID: 540501603}
   ambientMusicSource: {fileID: 502195027}
+  scoreDisplay: {fileID: 1931654306}
 --- !u!1 &2064822793
 GameObject:
   m_ObjectHideFlags: 0
