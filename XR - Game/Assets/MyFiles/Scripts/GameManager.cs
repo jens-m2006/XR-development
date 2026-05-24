@@ -111,10 +111,12 @@ public class GameManager : MonoBehaviour
     private void EnterMenuState()
     {
         OnMenuStarted?.Invoke();
+        
     }
     private void EnterLevelPlayState()
     {
         OnLevelStarted?.Invoke();
+        
     }
 
 
