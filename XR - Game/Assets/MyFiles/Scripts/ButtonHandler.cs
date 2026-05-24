@@ -1,7 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; // Verplicht voor de Slider component
-using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem.LowLevel; // Verplicht om van scene te wisselen
+using UnityEngine.UI; 
 
 public class ButtonHandler : MonoBehaviour
 {
@@ -18,14 +16,22 @@ public class ButtonHandler : MonoBehaviour
 
     void Start()
     {
-      
         if (canvasDoelObject != null) canvasDoelObject.SetActive(false);
         if (laadSlider != null) laadSlider.value = 0;
     }
 
     void Update()
     {
-     
+        if (GameManager.Instance != null && GameManager.Instance.currentState == GameManager.GameState.Menu)
+        {
+            // Als de UI nog openstond terwijl we al in het menu zijn beland, sluiten we deze hier direct af
+            if (isAanHetLaden) 
+            {
+                ResetLaden();
+            }
+            return;
+        }
+
         if (OVRInput.GetDown(OVRInput.RawButton.B))
         {
             isAanHetLaden = true;
@@ -33,25 +39,23 @@ public class ButtonHandler : MonoBehaviour
             if (canvasDoelObject != null) canvasDoelObject.SetActive(true);
         }
 
-  
         if (isAanHetLaden && OVRInput.Get(OVRInput.RawButton.B))
         {
             huidigeTijd += Time.deltaTime;
-            
             
             if (laadSlider != null)
             {
                 laadSlider.value = huidigeTijd / laadTijd;
             }
 
-       
             if (huidigeTijd >= laadTijd)
             {
+                // Eerst de UI netjes opruimen, dan pas de state omschakelen via de GameManager
+                ResetLaden();
                 GaNaarMainMenu();
             }
         }
 
-       
         if (OVRInput.GetUp(OVRInput.RawButton.B))
         {
             ResetLaden();

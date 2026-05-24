@@ -21,6 +21,10 @@ public class GameManager : MonoBehaviour
     public int totalWins;
     public int totalLosses;
 
+    [Header("Audio Settings")]
+    public bool isMusicEnabled;
+    public bool isSfxEnabled;
+
     // Temporary score for the currently active level
     private int currentLevelScore;
 
@@ -32,7 +36,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        // Load saved data as soon as the game starts
         LoadStats();
         UpdateState(GameState.Menu);
     }
@@ -117,13 +120,19 @@ public class GameManager : MonoBehaviour
 
 
     // Data read and write
+    // --- Pas deze twee bestaande methodes onderaan je GameManager aan ---
     private void SaveStats()
     {
-        SaveData.SaveGameData(highScore, lastScore, totalWins, totalLosses);
+        // Geef nu ook de audio statussen mee aan je opslagscript
+        SaveData.SaveGameData(highScore, lastScore, totalWins, totalLosses, isMusicEnabled, isSfxEnabled);
     }
+
     private void LoadStats()
     {
-        SaveData.LoadGameData(out highScore, out lastScore, out totalWins, out totalLosses);
+        // Haal alle data in één keer op uit je SaveData script
+        SaveData.LoadGameData(out highScore, out lastScore, out totalWins, out totalLosses, out isMusicEnabled, out isSfxEnabled);
+        
+        // Voer hier eventueel direct de actie uit om muziek/sfx te dempen op basis van de geladen bools
     }
 
 
@@ -136,5 +145,16 @@ public class GameManager : MonoBehaviour
         #else
         Application.Quit(); 
         #endif
+    }
+
+    public void ResetGameStats()
+    {
+        SaveData.ResetAllStats();
+        
+        // Direct na het wissen laden we de schone fabrieksinstellingen in je GameManager
+        LoadStats(); 
+        
+        // Optioneel: activeer events om je UI direct visueel te updaten naar 0/uit
+        // bv. OnScoreChanged?.Invoke(0);
     }
 }
