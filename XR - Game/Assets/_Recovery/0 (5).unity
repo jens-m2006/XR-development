@@ -26963,7 +26963,6 @@ Transform:
   - {fileID: 235190119}
   - {fileID: 514213662}
   - {fileID: 1037045847}
-  - {fileID: 805659487}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &773610398
@@ -27955,11 +27954,11 @@ Transform:
   m_GameObject: {fileID: 805659485}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.41108704, y: -2.5175374, z: 26.262863}
+  m_LocalPosition: {x: -30.261436, y: -1.7859173, z: 60.486214}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 772745400}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &810285170
 GameObject:
@@ -29989,11 +29988,11 @@ Transform:
   m_GameObject: {fileID: 865187253}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.1369, y: 0, z: 43.15985}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2037238112}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &865187257
 MonoBehaviour:
@@ -56935,8 +56934,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TeleportPlayer
   playerRig: {fileID: 879829840}
   destinationTarget: {fileID: 2127080223}
-  menuPosition: {x: 0, y: 0, z: 0}
-  menuRotation: {x: 0, y: 0, z: 0}
 --- !u!114 &1684118741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72216,7 +72213,6 @@ Transform:
   - {fileID: 293751295}
   - {fileID: 879829845}
   - {fileID: 2127080223}
-  - {fileID: 865187256}
   - {fileID: 978655776}
   - {fileID: 1404986607}
   - {fileID: 668107187}
@@ -108414,3 +108410,5 @@ SceneRoots:
   - {fileID: 2037238112}
   - {fileID: 632118994}
   - {fileID: 772745400}
+  - {fileID: 805659487}
+  - {fileID: 865187256}

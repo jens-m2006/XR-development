@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI; // Verplicht voor de Slider component
-using UnityEngine.SceneManagement; // Verplicht om van scene te wisselen
+using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem.LowLevel; // Verplicht om van scene te wisselen
 
 public class ButtonHandler : MonoBehaviour
 {
@@ -67,6 +68,6 @@ public class ButtonHandler : MonoBehaviour
 
     void GaNaarMainMenu()
     {
-        // voor binnenkort
+        GameManager.Instance.CancelLevel();
     }
 }
