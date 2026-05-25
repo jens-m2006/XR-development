@@ -8,10 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MyFiles/Scenes/MainScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/MyFiles/Scripts/Excercise GameManager Singelton/TestScene2.unity
     guid: 1f403294c44d5164eb6b47004d78a083
-  - enabled: 1
+  - enabled: 0
     path: Assets/MyFiles/Scripts/Excercise GameManager Singelton/TestScene1.unity
     guid: 7b5a354d1ccbfd648aa19085d88f7436
   m_configObjects:

@@ -8,18 +8,16 @@ public class SettingsUI : MonoBehaviour
     [SerializeField] private Button resetStatsButton;
     [SerializeField] private Button saveBackButton;
 
-    [SerializeField] private AudioSource ambientMusicSource;
 
     private void Awake()
     {
         musicToggle.onValueChanged.AddListener(OnMusicToggled);
         sfxToggle.onValueChanged.AddListener(OnSfxToggled);
         resetStatsButton.onClick.AddListener(OnResetStatsClicked);
-        saveBackButton.onClick.AddListener(OnSaveBackClicked);
+        saveBackButton.onClick.AddListener(OnSaveBackClicked);  
 
-        bool isMusicOn = PlayerPrefs.GetInt("IsMusicOn", 1) == 1;
-        musicToggle.isOn = isMusicOn;
-        UpdateMusicStatus(isMusicOn);
+        musicToggle.isOn = GameManager.Instance.isMusicEnabled;
+        sfxToggle.isOn = GameManager.Instance.isSfxEnabled;
     }
 
     private void OnDestroy()
@@ -32,33 +30,22 @@ public class SettingsUI : MonoBehaviour
 
     private void OnMusicToggled(bool isOn)
     {
-        PlayerPrefs.SetInt("IsMusicOn", isOn ? 1 : 0);
-        PlayerPrefs.Save();
-        UpdateMusicStatus(isOn);
-    }
-
-    private void UpdateMusicStatus(bool isOn)
-    {
-        if (ambientMusicSource != null)
-        {
-            ambientMusicSource.mute = !isOn;
-        }
+        GameManager.Instance.SetMusicEnabled(isOn);
     }
 
     private void OnSfxToggled(bool isOn)
     {
-        PlayerPrefs.SetInt("IsSfxOn", isOn ? 1 : 0);
-        PlayerPrefs.Save();
+        GameManager.Instance.SetSfxEnabled(isOn);
     }
+
 
     private void OnResetStatsClicked()
     {
-        PlayerPrefs.DeleteKey("PlayerStats"); 
-        PlayerPrefs.Save();
+        GameManager.Instance.ResetGameStats();
     }
 
     private void OnSaveBackClicked()
     {
-        // GameManager.Instance.LoadMainMenu();
+        
     }
 }

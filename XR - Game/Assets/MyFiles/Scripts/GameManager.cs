@@ -104,28 +104,29 @@ public class GameManager : MonoBehaviour
             UpdateState(GameState.Menu);
         }
     }
-
-
-
-    // --- State Logic Methods ---
+ 
     private void EnterMenuState()
     {
         OnMenuStarted?.Invoke();
-        
+        // Ensure SFX stops immediately when entering menu
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.UpdateSfxPlayback(false);
+        }
+        ApplyAudioState();
     }
+
     private void EnterLevelPlayState()
     {
         OnLevelStarted?.Invoke();
-        
+        ApplyAudioState();
     }
 
 
 
-    // Data read and write
-    // --- Pas deze twee bestaande methodes onderaan je GameManager aan ---
+    
     private void SaveStats()
     {
-        // Geef nu ook de audio statussen mee aan je opslagscript
         SaveData.SaveGameData(highScore, lastScore, totalWins, totalLosses, isMusicEnabled, isSfxEnabled);
     }
 
@@ -133,12 +134,30 @@ public class GameManager : MonoBehaviour
     {
         // Haal alle data in één keer op uit je SaveData script
         SaveData.LoadGameData(out highScore, out lastScore, out totalWins, out totalLosses, out isMusicEnabled, out isSfxEnabled);
-        
-        // Voer hier eventueel direct de actie uit om muziek/sfx te dempen op basis van de geladen bools
+        ApplyAudioState();
     }
 
 
 
+
+    private void ApplyAudioState()
+    {
+        if (AudioManager.Instance == null) return;
+
+        // Ensure AudioManager knows the stored preference
+        AudioManager.Instance.SetSFX(isSfxEnabled);
+
+        // Music should only play in the Menu and when enabled in settings
+        bool shouldPlayMusic = currentState == GameState.Menu && isMusicEnabled;
+        AudioManager.Instance.UpdateMusicPlayback(shouldPlayMusic);
+
+        // SFX are only allowed in LevelPlay and when enabled in settings
+        bool shouldPlaySfx = currentState == GameState.LevelPlay && isSfxEnabled;
+        AudioManager.Instance.UpdateSfxPlayback(shouldPlaySfx);
+    }
+
+
+    //UI settings buttons
 
     public void QuitGame()
     {
@@ -159,4 +178,22 @@ public class GameManager : MonoBehaviour
         // Optioneel: activeer events om je UI direct visueel te updaten naar 0/uit
         // bv. OnScoreChanged?.Invoke(0);
     }
+
+
+    public void SetMusicEnabled(bool enabled)
+    {
+        isMusicEnabled = enabled;
+        AudioManager.Instance.SetMusic(enabled);
+        SaveStats();
+        ApplyAudioState();
+    }
+
+    public void SetSfxEnabled(bool enabled)
+    {
+        isSfxEnabled = enabled;
+        AudioManager.Instance.SetSFX(enabled);
+        SaveStats();
+    }
+
+
 }
