@@ -211,4 +211,9 @@ public class Agent : MonoBehaviour
         away.Normalize();
         return transform.position + away * 10f;
     }
+
+    public string GetCurrentStateName()
+    {
+        return currentState != null ? currentState.GetType().Name : "";
+    }
 }

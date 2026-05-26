@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Audio; // Nodig voor de Audio Mixer
 
 public class AudioManager : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class AudioManager : MonoBehaviour
     private AudioSource oneShotSource;
     private AudioSource musicSource;
     [SerializeField] private AudioClip backgroundMusic;
+
+    [Header("Audio Mixer Settings")]
+    [SerializeField] private AudioMixerGroup sfxMixerGroup; // Alleen voor One Shots!
 
     private List<AudioSource> sfxLoopSources = new List<AudioSource>();
 
@@ -38,6 +42,12 @@ public class AudioManager : MonoBehaviour
             musicSource.clip = backgroundMusic;
         }
 
+        // HIER GEKOPPELD: Alleen de One Shot bron krijgt de harde mixer
+        if (sfxMixerGroup != null)
+        {
+            oneShotSource.outputAudioMixerGroup = sfxMixerGroup;
+        }
+
         // apply initial volumes
         musicSource.volume = musicVolume;
         oneShotSource.volume = sfxVolume;
@@ -53,6 +63,8 @@ public class AudioManager : MonoBehaviour
     {
         if (!sfxLoopSources.Contains(src))
             sfxLoopSources.Add(src);
+        
+        // De regel die de mixer hier aan de loop koppelde is nu VEILIG VERWIJDERD!
     }
 
     public void UnregisterSFXLoop(AudioSource src)
