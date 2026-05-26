@@ -65,6 +65,11 @@ public class BlobLungeState : State
         bAgent.transform.position = bAgent.playerTransform.position;
         Debug.Log("JUMPSCARE: The MeatBlob hit your face!");
 
+          if (Player.Instance != null)
+            {
+                Player.Instance.TakeDamage(Player.Instance.maxHealth);
+            }
+
         
     }
 }

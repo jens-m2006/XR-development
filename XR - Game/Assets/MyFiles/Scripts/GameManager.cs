@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -66,10 +68,21 @@ public class GameManager : MonoBehaviour
 
     public void CancelLevel()
     {
+        
         if (currentState == GameState.LevelPlay)
         {
+            // 1. Update de status naar het menu
             UpdateState(GameState.Menu);
+
+            // 2. Vraag de naam op van de huidige actieve scène
+            string currentSceneName = SceneManager.GetActiveScene().name;
+
+            // 3. Herlaad de scène direct om alles (monsters, lichten, batterijen) te resetten
+            SceneManager.LoadScene(currentSceneName);
+            
+            Debug.Log("[GAMEMANAGER] Switched to Menu and reloaded the scene successfully.");
         }
+
     }
 
     // Win condition: Pass the score achieved in this level
@@ -120,6 +133,7 @@ public class GameManager : MonoBehaviour
     {
         OnLevelStarted?.Invoke();
         ApplyAudioState();
+        
     }
 
 
