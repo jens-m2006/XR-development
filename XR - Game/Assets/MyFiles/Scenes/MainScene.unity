@@ -1138,7 +1138,7 @@ Transform:
   m_GameObject: {fileID: 29839808}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -22.19728, y: -1.3337001, z: 72.36691}
+  m_LocalPosition: {x: -8.87, y: -1.3337001, z: 78.14}
   m_LocalScale: {x: 0.38, y: 0.38, z: 0.38}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -13327,7 +13327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2528cf2ff3868aa498468858c689053b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20322,6 +20322,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 254469c41704e4f47bd9a79ba550f9b5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 524891481}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 254469c41704e4f47bd9a79ba550f9b5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 524891482}
   m_SourcePrefab: {fileID: 100100000, guid: 254469c41704e4f47bd9a79ba550f9b5, type: 3}
 --- !u!1 &516952810
 GameObject:
@@ -20828,7 +20831,7 @@ Transform:
   m_GameObject: {fileID: 523586821}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -22.597282, y: -1.3337001, z: 61.22191}
+  m_LocalPosition: {x: 6.22, y: -1.3337001, z: 63.37}
   m_LocalScale: {x: 0.38, y: 0.38, z: 0.38}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -21233,6 +21236,18 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &524891482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 524891473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 181282e8010f8bc4e8cf9b08ec001192, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AgentRadioReceiver
 --- !u!1 &525501052
 GameObject:
   m_ObjectHideFlags: 0
@@ -54189,7 +54204,7 @@ Transform:
   m_GameObject: {fileID: 1351809645}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -24.116997, y: -1.3337001, z: 70.16291}
+  m_LocalPosition: {x: -7.77, y: -1.3337001, z: 45.95}
   m_LocalScale: {x: 0.38, y: 0.38, z: 0.38}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -54631,7 +54646,7 @@ Transform:
   m_GameObject: {fileID: 1362066004}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -22.938278, y: -1.3337001, z: 67.40791}
+  m_LocalPosition: {x: -24.2, y: -1.3337001, z: 67.40791}
   m_LocalScale: {x: 0.38, y: 0.38, z: 0.38}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -56438,6 +56453,7 @@ Transform:
   - {fileID: 455979766}
   - {fileID: 813768532}
   - {fileID: 598103962}
+  - {fileID: 1517753484}
   m_Father: {fileID: 2037238112}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1408530841
@@ -61010,6 +61026,56 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1785691565}
   m_SourcePrefab: {fileID: 100100000, guid: ca2674360cec2244f9bad0543c172d64, type: 3}
+--- !u!1 &1517753483
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1517753484}
+  - component: {fileID: 1517753485}
+  m_Layer: 0
+  m_Name: ObjectCuller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1517753484
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517753483}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1404986607}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1517753485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517753483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e0e534b89a98354aada7ac1eacb1556, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutomaticObjectCuller
+  safeDistance: 6
+  targetsToManage:
+  - {fileID: 523586821}
+  - {fileID: 1362066004}
+  - {fileID: 1351809645}
+  - {fileID: 29839808}
 --- !u!1 &1520214378
 GameObject:
   m_ObjectHideFlags: 0
@@ -82178,7 +82244,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 766accc08353cae4facc1a7336cbf0e8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3253409454975574844, guid: 766accc08353cae4facc1a7336cbf0e8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
