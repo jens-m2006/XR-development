@@ -3,12 +3,11 @@
 link naar folder waar mijn scripts zich bevinden:
 [link](XR%20-%20Game/Assets/MyFiles/Scripts)
 
-## Update + veranderingen
-- Ik heb de state waarbij de enemy  achter u teleporteert weg gedaan om het niet echt bij de hide en sneek concept past in de plaats maakt het kapot maken of uitschakelen van de batterijen een geluid waardoor de enemy weet in welke richting je je bevind.
-- ik ben van plan een patrouille pat te gebruiken voor de enemy
 
 
 ## Spelbeschrijving:
+<img width="1024" height="520" alt="afbeelding" src="https://github.com/user-attachments/assets/1f74a75f-26f3-4020-96a0-83b75455dcbd" />
+
 De speler is in een soort doolhofachtig klas lokaal 
 er is een leerkracht robot enemy dat achter je na zit en als hij te dicht in de buurt komt ben je dood (dus je moet je verstoppen of weg rennen)
 
