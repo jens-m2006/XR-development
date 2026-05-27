@@ -7,6 +7,7 @@ public class Agent : MonoBehaviour
     public Transform player;
     public Transform[] waypoints;
     public float detectionRange = 10f;
+    public float damageRange = 2f; // Range in which agent can damage player
     public float viewDotThreshold = 0.3f;
     public float waypointDistance = 2f;
     public float checkpointDistance = 3f;
@@ -187,7 +188,25 @@ public class Agent : MonoBehaviour
 
     public Transform GetCurrentWaypoint()
     {
-        return waypoints == null || waypoints.Length == 0 ? null : waypoints[currentWaypointIndex];
+        if (waypoints == null || waypoints.Length == 0) return null;
+
+        // Loop door alle waypoints om een enabled te vinden, startend bij currentWaypointIndex
+        for (int i = 0; i < waypoints.Length; i++)
+        {
+            int index = (currentWaypointIndex + i) % waypoints.Length;
+            Transform wp = waypoints[index];
+
+            if (wp == null) continue;
+
+            WaypointReceiver receiver = wp.GetComponent<WaypointReceiver>();
+            if (receiver != null && receiver.IsThisWaypointDisabled()) continue;
+
+            // Gevonden: zet index naar dit waypoint en geef het terug
+            currentWaypointIndex = index;
+            return wp;
+        }
+
+        return null; // Alle waypoints zijn disabled
     }
 
     public void MoveToNextWaypoint()
@@ -196,11 +215,13 @@ public class Agent : MonoBehaviour
         if (waypoint == null) return;
 
         MoveTowards(waypoint.position);
-        if (Vector3.Distance(transform.position, waypoint.position) >= waypointDistance) 
+
+        if (Vector3.Distance(transform.position, waypoint.position) >= waypointDistance)
         {
             return;
         }
 
+        // Stap naar het volgende waypoint en laat GetCurrentWaypoint disabled ones overslaan
         currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
         ResetBattery();
     }

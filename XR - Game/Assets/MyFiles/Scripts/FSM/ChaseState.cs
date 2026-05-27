@@ -5,7 +5,10 @@ public class ChaseState : State
     public ChaseState(Agent agent) : base(agent) { }
 
     private float lostSightTimer = 0f;
-    private float lostSightTimeout = 2f; // seconds to search before giving up
+    private float lostSightTimeout = 2f;
+
+    private float damagePerSecond = 10f;
+    private float damageTimer = 0f;
 
     public override void Enter()
     {
@@ -15,30 +18,64 @@ public class ChaseState : State
 
     public override void Update()
     {
-        // Move towards player if visible, otherwise increment lostSightTimer
+        if (AllWaypointsDisabled())
+        {
+            agent.ChangeState(new FleeState(agent));
+            return;
+        }
+
         if (agent.CanSeePlayer())
         {
             lostSightTimer = 0f;
             agent.MoveTowards(agent.player.position);
             agent.UpdateChaseTimer(Time.deltaTime);
+
+            // Only deal damage if player is within damage range
+            if (agent.DistanceToPlayer() <= agent.damageRange)
+            {
+                damageTimer += Time.deltaTime;
+                if (damageTimer >= 1f)
+                {
+                    damageTimer = 0f;
+                    if (Player.Instance != null)
+                    {
+                        Player.Instance.TakeDamage(damagePerSecond);
+                    }
+                }
+            }
+            else
+            {
+                damageTimer = 0f; // Reset timer if player gets out of range
+            }
         }
         else
         {
             lostSightTimer += Time.deltaTime;
         }
 
-        // If battery drops below configured fraction, switch to flee earlier
         if (agent.battery <= agent.maxBattery * agent.fleeBatteryPercent || agent.IsBatteryEmpty())
         {
             agent.ChangeState(new FleeState(agent));
             return;
         }
 
-        // Only give up chase after the player has been out of sight for a short timeout
         if (lostSightTimer >= lostSightTimeout || agent.DistanceToPlayer() > agent.detectionRange * 1.5f)
         {
             agent.ChangeState(new PatrolState(agent));
             return;
         }
+    }
+
+    private bool AllWaypointsDisabled()
+    {
+        if (agent.waypoints == null) return true;
+        foreach (Transform wp in agent.waypoints)
+        {
+            if (wp == null) continue;
+            WaypointReceiver receiver = wp.GetComponent<WaypointReceiver>();
+            if (receiver == null || !receiver.IsThisWaypointDisabled())
+                return false;
+        }
+        return true;
     }
 }
