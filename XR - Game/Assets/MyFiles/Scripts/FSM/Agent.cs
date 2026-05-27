@@ -21,7 +21,7 @@ public class Agent : MonoBehaviour
 
     private State currentState;
     private NavMeshAgent navAgent;
-    [HideInInspector] public Renderer rend; // For hiding the field in the inspecor while being public
+    [HideInInspector] public Renderer rend; 
     
     private int currentWaypointIndex = 0;
     private float chaseTimer = 0f;
