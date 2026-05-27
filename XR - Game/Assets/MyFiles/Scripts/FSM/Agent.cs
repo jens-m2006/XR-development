@@ -13,6 +13,7 @@ public class Agent : MonoBehaviour
     public float maxBattery = 100f;
     public float battery = 100f;
     public float chaseTimeToDrain = 10f;
+    public float fleeBatteryPercent = 0.25f; // Fraction of maxBattery to trigger fleeing
 
     private Vector3 startPosition;
     private Quaternion startRotation;
@@ -34,8 +35,30 @@ public class Agent : MonoBehaviour
 
         rend = GetComponent<Renderer>(); // render component for changing  color
         navAgent = GetComponent<NavMeshAgent>(); // Component for the navmesh
-        ChangeState(new PatrolState(this));
 
+        if (player == null)
+        {
+            Player found = Object.FindFirstObjectByType<Player>();
+            if (found != null)
+            {
+                player = found.transform;
+            }
+            else
+            {
+                GameObject playerObj = GameObject.FindWithTag("Player");
+                if (playerObj != null)
+                {
+                    player = playerObj.transform;
+                }
+            }
+        }
+
+        if (player == null)
+        {
+            Debug.LogWarning("Agent: player transform is not assigned and no Player object was found.");
+        }
+
+        ChangeState(new PatrolState(this));
         GameManager.OnLevelReset += ResetAgent;
     }
 
@@ -75,6 +98,7 @@ public class Agent : MonoBehaviour
 
         if (navAgent != null)
         {
+            navAgent.enabled = true;
             navAgent.ResetPath();
             navAgent.isStopped = true;
         }
@@ -91,14 +115,21 @@ public class Agent : MonoBehaviour
         ChangeState(new PatrolState(this));
     }
 
-    // checks eerst hoe ver weg en daarna of binnen gezichtsveld en daanra of er geen muur tussne zit
+    // checks eerst hoe ver weg en daarna of binnen gezichtsveld en daarna of er geen muur tussen zit
     public float DistanceToPlayer()
     {
+        if (player == null)
+        {
+            return float.MaxValue;
+        }
+
         return Vector3.Distance(transform.position, player.position);
     }
 
     public bool CanSeePlayer()
     {
+        if (player == null) return false;
+
         Vector3 dir = (player.position - transform.position).normalized;
         float dot = Vector3.Dot(transform.forward, dir);
 
@@ -112,7 +143,17 @@ public class Agent : MonoBehaviour
 
         if (Physics.Raycast(origin, dir, out hit, detectionRange))
         {
-            return hit.transform == player;
+            if (hit.transform == player || hit.transform.root == player.root)
+            {
+                return true;
+            }
+
+            if (hit.transform.CompareTag("Player"))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         return false;
@@ -129,6 +170,12 @@ public class Agent : MonoBehaviour
     // movemnts =========================
     public void MoveTowards(Vector3 target)
     {
+        if (navAgent == null)
+            return;
+
+        if (!navAgent.enabled)
+            navAgent.enabled = true;
+
         navAgent.isStopped = false;
         navAgent.SetDestination(target);
     }

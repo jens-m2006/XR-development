@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class BatteryController : MonoBehaviour
 {
     public static System.Action OnAnyBatteryBroken; // Creates the radio frequency for the blob
+    public static System.Action<BatteryController> OnAnyBatteryBroken1;
+
     
     [Header("Battery Settings")]
     public int hitsRequired = 2;
@@ -30,7 +32,7 @@ public class BatteryController : MonoBehaviour
     public Renderer beamRenderer; 
     [ColorUsage(true, true)] public Color beamBlueColor = Color.blue; 
     [ColorUsage(true, true)] public Color beamOrangeHitColor = new Color(1f, 0.4f, 0f); 
-    [ColorUsage(true, true)] public Color beamRedColor = Color.red;   
+    // beamRedColor is verwijderd omdat deze niet meer gebruikt wordt
 
     [Header("External Script Component To Disable")]
     public MonoBehaviour scriptOnParentToDisable;
@@ -65,6 +67,7 @@ public class BatteryController : MonoBehaviour
         {
             beamMaterial = beamRenderer.material;
             SetBeamEmission(beamBlueColor);
+            beamRenderer.enabled = true; // Zorg dat de beam aanstaat bij de start
         }
 
         if (componentAnimator != null)
@@ -141,6 +144,7 @@ public class BatteryController : MonoBehaviour
         isBroken = true;
         // Fire the signal so the listening MeatBlob goes enraged
         OnAnyBatteryBroken?.Invoke();
+        OnAnyBatteryBroken1?.Invoke(this);
 
         slowDownTimer = 0f;
         Debug.Log("BATTERY DESTROYED: Explosion sequence started!");
@@ -183,7 +187,11 @@ public class BatteryController : MonoBehaviour
             }
         }
 
-        SetBeamEmission(beamRedColor);
+        // In plaats van rood te worden, schakelen we de Renderer nu volledig uit
+        if (beamRenderer != null)
+        {
+            beamRenderer.enabled = false;
+        }
     }
 
     private IEnumerator VibrateControllersRoutine(float duration)
@@ -266,6 +274,12 @@ public class BatteryController : MonoBehaviour
         }
 
         SetLightsColor(Color.blue);
+        
+        // Zet de beam weer aan en herstel de blauwe kleur bij een reset
+        if (beamRenderer != null)
+        {
+            beamRenderer.enabled = true;
+        }
         SetBeamEmission(beamBlueColor);
     }
 }
