@@ -12,6 +12,7 @@ public class ScoreDisplay : MonoBehaviour
     private void Start()
     {
         GameManager.OnMenuStarted += UpdateScoreBoardVisuals;
+        GameManager.OnStatsUpdated += UpdateScoreBoardVisuals;
         UpdateScoreBoardVisuals();
     }
 

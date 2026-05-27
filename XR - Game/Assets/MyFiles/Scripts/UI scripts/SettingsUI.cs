@@ -18,6 +18,8 @@ public class SettingsUI : MonoBehaviour
 
         musicToggle.isOn = GameManager.Instance.isMusicEnabled;
         sfxToggle.isOn = GameManager.Instance.isSfxEnabled;
+
+        GameManager.OnStatsUpdated += RefreshToggleStates;
     }
 
     private void OnDestroy()
@@ -26,6 +28,15 @@ public class SettingsUI : MonoBehaviour
         sfxToggle.onValueChanged.RemoveListener(OnSfxToggled);
         resetStatsButton.onClick.RemoveAllListeners();
         saveBackButton.onClick.RemoveAllListeners();
+        GameManager.OnStatsUpdated -= RefreshToggleStates;
+    }
+
+    private void RefreshToggleStates()
+    {
+        if (GameManager.Instance == null) return;
+
+        musicToggle.isOn = GameManager.Instance.isMusicEnabled;
+        sfxToggle.isOn = GameManager.Instance.isSfxEnabled;
     }
 
     private void OnMusicToggled(bool isOn)

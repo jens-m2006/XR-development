@@ -10,9 +10,8 @@ public class GameManager : MonoBehaviour
     public static event Action OnMenuStarted;
     public static event Action OnLevelStarted;
     public static event Action OnLevelReset;
-    
-    
-    
+    public static event Action OnStatsUpdated;
+
     public static GameManager Instance { get; private set; }
 
     public enum GameState { Menu, LevelPlay }
@@ -42,14 +41,12 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        LoadStats();
     }
 
     private void Start()
     {
-        // 1. Laad direct de juiste getallen in uit de SaveData
-        LoadStats();
-        
-        // 2. Start een veilige VR-opstartvertraging
+        // Start een veilige VR-opstartvertraging
         StartCoroutine(SafeVRStartSequence());
     }
 
@@ -175,6 +172,8 @@ private System.Collections.IEnumerator SafeVRStartSequence()
     private void SaveStats()
     {
         SaveData.SaveGameData(highScore, lastScore, totalWins, totalLosses, isMusicEnabled, isSfxEnabled);
+        Debug.Log($"[GAMEMANAGER] Saved stats: highScore={highScore}, lastScore={lastScore}, wins={totalWins}, losses={totalLosses}, music={isMusicEnabled}, sfx={isSfxEnabled}");
+        OnStatsUpdated?.Invoke();
     }
 
     private void LoadStats()
@@ -182,6 +181,8 @@ private System.Collections.IEnumerator SafeVRStartSequence()
         // Haal alle data in één keer op uit je SaveData script
         SaveData.LoadGameData(out highScore, out lastScore, out totalWins, out totalLosses, out isMusicEnabled, out isSfxEnabled);
         ApplyAudioState();
+        Debug.Log($"[GAMEMANAGER] Loaded stats: highScore={highScore}, lastScore={lastScore}, wins={totalWins}, losses={totalLosses}, music={isMusicEnabled}, sfx={isSfxEnabled}");
+        OnStatsUpdated?.Invoke();
     }
 
 
@@ -228,8 +229,21 @@ private System.Collections.IEnumerator SafeVRStartSequence()
         // Direct na het wissen laden we de schone fabrieksinstellingen in je GameManager
         LoadStats(); 
         
-        // Optioneel: activeer events om je UI direct visueel te updaten naar 0/uit
-        // bv. OnScoreChanged?.Invoke(0);
+        // Forceer UI-update voor scorebord en settings toggles
+        OnStatsUpdated?.Invoke();
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveStats();
+    }
+
+    private void OnDisable()
+    {
+        if (Instance == this)
+        {
+            SaveStats();
+        }
     }
 
 
