@@ -77171,7 +77171,6 @@ MonoBehaviour:
   lungeRange: 3
   navAgent: {fileID: 0}
   isEnraged: 0
-  isLunging: 0
   lungeSound: {fileID: 8300000, guid: e7b61622e4f6b0044a959495e3c7d2c1, type: 3}
 --- !u!195 &1958466504
 NavMeshAgent:

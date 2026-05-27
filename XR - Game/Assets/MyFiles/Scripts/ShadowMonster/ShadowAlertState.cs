@@ -22,6 +22,12 @@ public class ShadowAlertState : State
 
         TriggerAlarmAtPosition();
         alertTimer = 0f;
+
+        if (sAgent.playerCamera != null)
+        {
+            ShadowMonsterAgent.OnShadowMonsterAlertTriggered?.Invoke(sAgent.playerCamera.position);
+            Debug.Log("[SHADOW_RADIO] Broadcasted player location to the Robot Drone!");
+        }
     }
 
     public override void Update()

@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
         }
 
         currentHealth = maxHealth;
+        GameManager.OnLevelReset += ResetHealth;
     }
 
     // FIX: Monsters sturen een int, dus we voegen een extra methode toe die de float-versie aanroept
@@ -75,20 +76,13 @@ public class Player : MonoBehaviour
 
     private void Die()
     {
-        // 1. Wis het statische Action-geheugen om memory leaks te voorkomen
-       
+        GameManager.Instance.EndLevelWithLose(0);
+    }
 
-        // 2. Vraag de naam op van de scène waar je nu in staat
-        string currentSceneName = SceneManager.GetActiveScene().name;
-
-        // 3. Herlaad de scène direct. Hierdoor start de hele Backrooms-wereld 100% vers op!
-        SceneManager.LoadScene(currentSceneName);
-        
-        // (Optioneel: als jouw GameManager hierna nog iets moet doen, roep je die hieronder aan)
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.EndLevelWithLose(0);
-        }
+    private void ResetHealth()
+    {
+        currentHealth = maxHealth;
+        OnHealthChanged?.Invoke(currentHealth, maxHealth);
     }
 
    
@@ -97,5 +91,10 @@ public class Player : MonoBehaviour
     public void RequestHealthUpdate()
     {
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.OnLevelReset -= ResetHealth;
     }
 }

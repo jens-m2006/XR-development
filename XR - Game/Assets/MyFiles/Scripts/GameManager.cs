@@ -8,7 +8,9 @@ public class GameManager : MonoBehaviour
     
     //EVENTS AND ACTIONS
     public static event Action OnMenuStarted;
-    public static event Action OnLevelStarted; 
+    public static event Action OnLevelStarted;
+    public static event Action OnLevelReset;
+    
     
     
     public static GameManager Instance { get; private set; }
@@ -32,15 +34,50 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); }
-        else { Instance = this; }
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
+        // 1. Laad direct de juiste getallen in uit de SaveData
         LoadStats();
-        UpdateState(GameState.Menu);
+        
+        // 2. Start een veilige VR-opstartvertraging
+        StartCoroutine(SafeVRStartSequence());
     }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            // Laat statische events intact, zodat UI objects die bij scene load opnieuw worden gemaakt
+            // opnieuw kunnen subscriben en de scorebord update krijgen.
+            Instance = null;
+        }
+    }
+
+
+private System.Collections.IEnumerator SafeVRStartSequence()
+{
+    // Wacht exact 0.2 seconden tot de VR-headset en de level-vloer 100% stabiel geladen zijn
+    yield return new WaitForSeconds(0.2f);
+
+    // FIX: Zet de status heel even 'nep' op LevelPlay, zodat UpdateState(GameState.Menu) 
+    // gegarandeerd de switch maakt, EnterMenuState() opstart en OnMenuStarted vlijmscherp afvuurt!
+    currentState = GameState.LevelPlay;
+    
+    // 3. Activeer nu pas de Menu status en update het UI-bord
+    UpdateState(GameState.Menu);
+    
+    Debug.Log("[GAMEMANAGER] Safe VR startup complete: UI refreshed and player is safely on the floor.");
+}
 
     public void UpdateState(GameState newState)
     {
@@ -62,27 +99,21 @@ public class GameManager : MonoBehaviour
         if (currentState == GameState.Menu)
         {
             currentLevelScore = 0; // Reset score for the new level
+            ResetLevelObjects();
             UpdateState(GameState.LevelPlay);
         }
     }
 
     public void CancelLevel()
     {
-        
         if (currentState == GameState.LevelPlay)
         {
-            // 1. Update de status naar het menu
+            currentLevelScore = 0;
+            ResetLevelObjects();
             UpdateState(GameState.Menu);
 
-            // 2. Vraag de naam op van de huidige actieve scène
-            string currentSceneName = SceneManager.GetActiveScene().name;
-
-            // 3. Herlaad de scène direct om alles (monsters, lichten, batterijen) te resetten
-            SceneManager.LoadScene(currentSceneName);
-            
-            Debug.Log("[GAMEMANAGER] Switched to Menu and reloaded the scene successfully.");
+            Debug.Log("[GAMEMANAGER] Switched to Menu without reloading scene.");
         }
-
     }
 
     // Win condition: Pass the score achieved in this level
@@ -101,6 +132,7 @@ public class GameManager : MonoBehaviour
             }
 
             SaveStats(); // Save changes immediately
+            ResetLevelObjects();
             UpdateState(GameState.Menu);
         }
     }
@@ -114,6 +146,7 @@ public class GameManager : MonoBehaviour
             totalLosses++;
 
             SaveStats(); // Save changes immediately
+            ResetLevelObjects();
             UpdateState(GameState.Menu);
         }
     }
@@ -168,6 +201,12 @@ public class GameManager : MonoBehaviour
         // SFX are only allowed in LevelPlay and when enabled in settings
         bool shouldPlaySfx = currentState == GameState.LevelPlay && isSfxEnabled;
         AudioManager.Instance.UpdateSfxPlayback(shouldPlaySfx);
+    }
+
+    private void ResetLevelObjects()
+    {
+        OnLevelReset?.Invoke();
+        Debug.Log("[GAMEMANAGER] Level objects reset to their initial state.");
     }
 
 

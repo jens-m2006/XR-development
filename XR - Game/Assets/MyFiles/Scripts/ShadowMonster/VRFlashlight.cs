@@ -6,6 +6,21 @@ public class VRFlashlight : MonoBehaviour
     public float beamRange = 15f;    // How far the light shines
     public float beamRadius = 1.5f;  // The thickness of the light beam
 
+    private Vector3 startPosition;
+    private Quaternion startRotation;
+
+    private void Start()
+    {
+        startPosition = transform.position;
+        startRotation = transform.rotation;
+        GameManager.OnLevelReset += ResetFlashlightPosition;
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.OnLevelReset -= ResetFlashlightPosition;
+    }
+
     void Update()
     {
         // Shoot a thick volumetric ray straight forward from the flashlight lens
@@ -25,6 +40,12 @@ public class VRFlashlight : MonoBehaviour
                 monster.TriggerFlashlightHit();
             }
         }
+    }
+
+    private void ResetFlashlightPosition()
+    {
+        transform.position = startPosition;
+        transform.rotation = startRotation;
     }
 
     // Visualizes the thickness of the beam inside the Unity Editor scene view

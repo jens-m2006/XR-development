@@ -12,11 +12,15 @@ public class MeatBlobAgent : MonoBehaviour
     public float enragedSpeed = 4f;
     public float lungeRange = 3f;
 
+    private Vector3 startPosition;
+    private Quaternion startRotation;
+    private float startLungeRange;
+
     [HideInInspector] public NavMeshAgent navAgent;
     [HideInInspector] public bool isEnraged = false;
     
     private State currentState;
-    private bool isLunging = false; // FIX: Prevents the attack from looping infinitely
+    [HideInInspector] public bool isLunging = false; // FIX: Prevents the attack from looping infinitely
 
     [Header("Sound Effects")]
     public AudioClip lungeSound; // Sleep hier je enge jumpscare schreeuw in via de Inspector
@@ -26,8 +30,12 @@ public class MeatBlobAgent : MonoBehaviour
     {
         navAgent = GetComponent<NavMeshAgent>();
         navAgent.speed = roamSpeed;
+        startLungeRange = lungeRange;
+        startPosition = transform.position;
+        startRotation = transform.rotation;
 
         BatteryController.OnAnyBatteryBroken += GoEnraged;
+        GameManager.OnLevelReset += ResetBlob;
 
         ChangeState(new BlobRoamState(this));
     }
@@ -97,5 +105,31 @@ public class MeatBlobAgent : MonoBehaviour
     private void OnDestroy()
     {
         BatteryController.OnAnyBatteryBroken -= GoEnraged;
+        GameManager.OnLevelReset -= ResetBlob;
+    }
+
+    private void ResetBlob()
+    {
+        isEnraged = false;
+        lungeRange = startLungeRange;
+        isLunging = false;
+
+        if (navAgent != null)
+        {
+            navAgent.enabled = true;
+            navAgent.speed = roamSpeed;
+            navAgent.ResetPath();
+            navAgent.isStopped = false;
+        }
+
+        if (currentState != null)
+        {
+            currentState.Exit();
+            currentState = null;
+        }
+
+        transform.position = startPosition;
+        transform.rotation = startRotation;
+        ChangeState(new BlobRoamState(this));
     }
 }

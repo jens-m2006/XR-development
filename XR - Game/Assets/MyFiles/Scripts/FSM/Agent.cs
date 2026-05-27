@@ -14,6 +14,9 @@ public class Agent : MonoBehaviour
     public float battery = 100f;
     public float chaseTimeToDrain = 10f;
 
+    private Vector3 startPosition;
+    private Quaternion startRotation;
+
     private State currentState;
     private NavMeshAgent navAgent;
     [HideInInspector] public Renderer rend; // For hiding the field in the inspecor while being public
@@ -26,9 +29,14 @@ public class Agent : MonoBehaviour
     // start------------
     void Start()
     {
+        startPosition = transform.position;
+        startRotation = transform.rotation;
+
         rend = GetComponent<Renderer>(); // render component for changing  color
         navAgent = GetComponent<NavMeshAgent>(); // Component for the navmesh
         ChangeState(new PatrolState(this));
+
+        GameManager.OnLevelReset += ResetAgent;
     }
 
     void Update()
@@ -52,6 +60,35 @@ public class Agent : MonoBehaviour
         {
             currentState.Enter();
         }
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.OnLevelReset -= ResetAgent;
+    }
+
+    private void ResetAgent()
+    {
+        battery = maxBattery;
+        chaseTimer = 0f;
+        currentWaypointIndex = 0;
+
+        if (navAgent != null)
+        {
+            navAgent.ResetPath();
+            navAgent.isStopped = true;
+        }
+
+        transform.position = startPosition;
+        transform.rotation = startRotation;
+
+        if (currentState != null)
+        {
+            currentState.Exit();
+            currentState = null;
+        }
+
+        ChangeState(new PatrolState(this));
     }
 
     // checks eerst hoe ver weg en daarna of binnen gezichtsveld en daanra of er geen muur tussne zit

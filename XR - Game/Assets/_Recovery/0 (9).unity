@@ -31079,6 +31079,7 @@ GameObject:
   m_Component:
   - component: {fileID: 794999757}
   - component: {fileID: 794999758}
+  - component: {fileID: 794999759}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -31120,6 +31121,22 @@ MonoBehaviour:
   totalLosses: 0
   isMusicEnabled: 0
   isSfxEnabled: 0
+--- !u!114 &794999759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794999756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd5103498111d14c8e37d5538f03317, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreDisplay
+  lastScoreAmountText: {fileID: 1988841739}
+  timesWonAmountText: {fileID: 1976905944}
+  timesLostAmountText: {fileID: 864918081}
+  highScoreAmountText: {fileID: 28030302}
 --- !u!1 &805505228
 GameObject:
   m_ObjectHideFlags: 0
@@ -51028,8 +51045,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   backgroundMusic: {fileID: 8300000, guid: dbb0c0b52e00e284f937f048e5424830, type: 3}
   playMusicOnStart: 1
-  ambientClips: []
-  playAmbientOnStart: 1
+  ambientClips:
+  - {fileID: 8300000, guid: 0d79c18db8b46b245b31369a7fc4a257, type: 3}
+  - {fileID: 8300000, guid: 513fea5b32dc7e34fb662a4b93e5ed65, type: 3}
+  - {fileID: 8300000, guid: 887ee3332c10fb44e8c701e3aede5447, type: 3}
+  - {fileID: 8300000, guid: 053253c3e5dd32b46bf3c3d97a4f469b, type: 3}
+  - {fileID: 8300000, guid: aa7bc4d89e2386b4caace46896140937, type: 3}
+  playAmbientOnStart: 0
   ambientVolume: 0.047
   minAmbientInterval: 10
   maxAmbientInterval: 30
@@ -67106,7 +67128,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 20437472682476688, guid: 11aaea5348574644a9eb4f4504fcce3f, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 20437472682476688, guid: 11aaea5348574644a9eb4f4504fcce3f, type: 3}
       propertyPath: m_ClearFlags
@@ -76454,7 +76476,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1931654305
 Transform:
   m_ObjectHideFlags: 0
@@ -77171,7 +77193,6 @@ MonoBehaviour:
   lungeRange: 3
   navAgent: {fileID: 0}
   isEnraged: 0
-  isLunging: 0
   lungeSound: {fileID: 8300000, guid: e7b61622e4f6b0044a959495e3c7d2c1, type: 3}
 --- !u!195 &1958466504
 NavMeshAgent:

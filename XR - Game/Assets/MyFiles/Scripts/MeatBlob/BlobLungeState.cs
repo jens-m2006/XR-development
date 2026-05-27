@@ -65,11 +65,21 @@ public class BlobLungeState : State
         bAgent.transform.position = bAgent.playerTransform.position;
         Debug.Log("JUMPSCARE: The MeatBlob hit your face!");
 
-          if (Player.Instance != null)
-            {
-                Player.Instance.TakeDamage(Player.Instance.maxHealth);
-            }
+        if (Player.Instance != null)
+        {
+            Player.Instance.TakeDamage(Player.Instance.maxHealth);
+        }
 
-        
+        // Re-enable the NavMeshAgent so the blob can resume roaming after the lunge
+        if (bAgent.navAgent != null)
+        {
+            bAgent.navAgent.enabled = true;
+            bAgent.navAgent.isStopped = false;
+            bAgent.navAgent.ResetPath();
+            bAgent.navAgent.speed = bAgent.isEnraged ? bAgent.enragedSpeed : bAgent.roamSpeed;
+        }
+
+        bAgent.isLunging = false;
+        bAgent.ChangeState(new BlobRoamState(bAgent));
     }
 }

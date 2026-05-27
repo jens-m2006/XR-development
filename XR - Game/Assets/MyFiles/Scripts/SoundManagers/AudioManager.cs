@@ -9,19 +9,30 @@ public class AudioManager : MonoBehaviour
 
     private AudioSource oneShotSource;
     private AudioSource musicSource;
+    private AudioSource ambientSource;
+
+    [Header("Music")]
     [SerializeField] private AudioClip backgroundMusic;
+    [SerializeField] private bool playMusicOnStart = true;
+
+    [Header("Ambient")]
+    [SerializeField] private AudioClip[] ambientClips;
+    [SerializeField] private bool playAmbientOnStart = true;
+    [SerializeField, Range(0f, 1f)] private float ambientVolume = 1f;
+    [SerializeField] private float minAmbientInterval = 10f;
+    [SerializeField] private float maxAmbientInterval = 30f;
 
     [Header("Audio Mixer Settings")]
-    [SerializeField] private AudioMixerGroup sfxMixerGroup; // Alleen voor One Shots!
+    [SerializeField] private AudioMixerGroup sfxMixerGroup;
 
     private List<AudioSource> sfxLoopSources = new List<AudioSource>();
 
-    [SerializeField, Range(0f,1f)] private float musicVolume = 1f;
-    [SerializeField, Range(0f,1f)] private float sfxVolume = 1f;
-    [SerializeField, Range(0f,1f)] private float ambientVolume = 1f;
+    [SerializeField, Range(0f, 1f)] private float musicVolume = 1f;
+    [SerializeField, Range(0f, 1f)] private float sfxVolume = 1f;
 
     private Queue<AudioClip> ambientQueue = new Queue<AudioClip>();
     private bool isPlayingAmbient = false;
+    private Coroutine ambientRoutine;
 
     private bool sfxEnabled = true;
     private bool musicEnabled = true;
@@ -35,36 +46,50 @@ public class AudioManager : MonoBehaviour
         else { Destroy(gameObject); return; }
 
         oneShotSource = gameObject.AddComponent<AudioSource>();
+        ambientSource = gameObject.AddComponent<AudioSource>();
         musicSource = gameObject.AddComponent<AudioSource>();
+
         musicSource.loop = true;
+        musicSource.playOnAwake = false;
         if (backgroundMusic != null)
         {
             musicSource.clip = backgroundMusic;
         }
 
-        // HIER GEKOPPELD: Alleen de One Shot bron krijgt de harde mixer
+        ambientSource.loop = false;
+        ambientSource.playOnAwake = false;
+
         if (sfxMixerGroup != null)
         {
             oneShotSource.outputAudioMixerGroup = sfxMixerGroup;
+            ambientSource.outputAudioMixerGroup = sfxMixerGroup;
         }
 
-        // apply initial volumes
         musicSource.volume = musicVolume;
         oneShotSource.volume = sfxVolume;
+        ambientSource.volume = ambientVolume;
     }
 
     void Start()
     {
-        sfxEnabled   = PlayerPrefs.GetInt("SFX",   1) == 1;
+        sfxEnabled = PlayerPrefs.GetInt("SFX", 1) == 1;
         musicEnabled = PlayerPrefs.GetInt("Music", 1) == 1;
+
+        if (playMusicOnStart && musicEnabled && backgroundMusic != null)
+        {
+            UpdateMusicPlayback(true);
+        }
+
+        if (playAmbientOnStart && ambientClips != null && ambientClips.Length > 0)
+        {
+            StartAmbientRandomPlayback();
+        }
     }
 
     public void RegisterSFXLoop(AudioSource src)
     {
         if (!sfxLoopSources.Contains(src))
             sfxLoopSources.Add(src);
-        
-        // De regel die de mixer hier aan de loop koppelde is nu VEILIG VERWIJDERD!
     }
 
     public void UnregisterSFXLoop(AudioSource src)
@@ -78,7 +103,6 @@ public class AudioManager : MonoBehaviour
         sfxEnabled = enabled;
         PlayerPrefs.SetInt("SFX", enabled ? 1 : 0);
 
-        // apply to loop sources depending on enabled flag and current allow flag
         foreach (var src in sfxLoopSources)
         {
             if (src == null) continue;
@@ -93,7 +117,7 @@ public class AudioManager : MonoBehaviour
         musicEnabled = enabled;
         PlayerPrefs.SetInt("Music", enabled ? 1 : 0);
 
-        if (!enabled)
+        if (!enabled && musicSource != null)
         {
             musicSource.Pause();
         }
@@ -126,7 +150,6 @@ public class AudioManager : MonoBehaviour
     {
         allowSfxPlayback = shouldAllow;
 
-        // Stop all SFX loops if not allowed (e.g., in Menu state)
         foreach (var src in sfxLoopSources)
         {
             if (src == null) continue;
@@ -134,7 +157,6 @@ public class AudioManager : MonoBehaviour
             else src.Pause();
         }
 
-        // Also stop the one-shot source if transitioning to Menu
         if (!shouldAllow && oneShotSource != null && oneShotSource.isPlaying)
         {
             oneShotSource.Stop();
@@ -143,11 +165,14 @@ public class AudioManager : MonoBehaviour
 
     public void PlayMusic(AudioClip clip)
     {
+        if (clip == null) return;
         musicSource.clip = clip;
-        if (musicEnabled) musicSource.Play();
+        if (musicEnabled)
+        {
+            musicSource.Play();
+        }
     }
 
-    // Enqueue ambient clip to play after currently playing ambient finishes
     public void PlayAmbient(AudioClip clip)
     {
         if (clip == null) return;
@@ -165,11 +190,42 @@ public class AudioManager : MonoBehaviour
         {
             var clip = ambientQueue.Dequeue();
             if (clip == null) continue;
-            oneShotSource.PlayOneShot(clip, ambientVolume);
-            // wait until clip is finished
+            ambientSource.PlayOneShot(clip, ambientVolume);
             yield return new WaitForSeconds(clip.length);
         }
         isPlayingAmbient = false;
+    }
+
+    public void StartAmbientRandomPlayback()
+    {
+        if (ambientRoutine != null) return;
+        ambientRoutine = StartCoroutine(PlayRandomAmbientSounds());
+    }
+
+    public void StopAmbientRandomPlayback()
+    {
+        if (ambientRoutine == null) return;
+        StopCoroutine(ambientRoutine);
+        ambientRoutine = null;
+    }
+
+    private IEnumerator PlayRandomAmbientSounds()
+    {
+        while (true)
+        {
+            float waitTime = Random.Range(minAmbientInterval, maxAmbientInterval);
+            yield return new WaitForSeconds(waitTime);
+            PlayAmbient(GetRandomAmbientClip());
+        }
+    }
+
+    private AudioClip GetRandomAmbientClip()
+    {
+        if (ambientClips == null || ambientClips.Length == 0) return null;
+        if (ambientClips.Length == 1) return ambientClips[0];
+
+        int index = Random.Range(0, ambientClips.Length);
+        return ambientClips[index];
     }
 
     public void PlaySFX(AudioClip clip)
@@ -195,5 +251,6 @@ public class AudioManager : MonoBehaviour
     public void SetAmbientVolume(float v)
     {
         ambientVolume = Mathf.Clamp01(v);
+        if (ambientSource != null) ambientSource.volume = ambientVolume;
     }
 }

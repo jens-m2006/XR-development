@@ -8,6 +8,19 @@ public class BatteryController : MonoBehaviour
     
     [Header("Battery Settings")]
     public int hitsRequired = 2;
+
+    private Vector3 startPosition;
+    private Quaternion startRotation;
+
+    private float currentSpeed = 1f;
+    private float slowDownDuration = 2f; 
+    private float slowDownTimer = 0f;
+
+    private Dictionary<Light, float> originalIntensities = new Dictionary<Light, float>();
+    private Material beamMaterial;
+
+    private int currentHits = 0;
+    private bool isBroken = false;
     
     [Header("Components")]
     public Animator componentAnimator;
@@ -33,18 +46,11 @@ public class BatteryController : MonoBehaviour
     
 
 
-    private int currentHits = 0;
-    private bool isBroken = false;
-    
-    private float currentSpeed = 1f;
-    private float slowDownDuration = 2f; 
-    private float slowDownTimer = 0f;
-
-    private Dictionary<Light, float> originalIntensities = new Dictionary<Light, float>();
-    private Material beamMaterial;
-
     void Start()
     {
+        startPosition = transform.position;
+        startRotation = transform.rotation;
+
         foreach (Light lightSource in statusLights)
         {
             if (lightSource != null)
@@ -65,6 +71,8 @@ public class BatteryController : MonoBehaviour
         {
             componentAnimator.speed = 1f;
         }
+
+        GameManager.OnLevelReset += ResetBattery;
     }
 
     void Update()
@@ -215,6 +223,8 @@ public class BatteryController : MonoBehaviour
 
     private void OnDestroy()
     {
+        GameManager.OnLevelReset -= ResetBattery;
+
         if (beamMaterial != null)
         {
             Destroy(beamMaterial);
@@ -224,5 +234,38 @@ public class BatteryController : MonoBehaviour
     private void OnDisable()
     {
         OVRInput.SetControllerVibration(0f, 0f, OVRInput.Controller.All);
+    }
+
+    private void ResetBattery()
+    {
+        currentHits = 0;
+        isBroken = false;
+        slowDownTimer = 0f;
+        currentSpeed = 1f;
+
+        transform.position = startPosition;
+        transform.rotation = startRotation;
+
+        if (componentAnimator != null)
+        {
+            componentAnimator.speed = 1f;
+        }
+
+        if (scriptOnParentToDisable != null)
+        {
+            scriptOnParentToDisable.enabled = true;
+        }
+
+        if (loopAudioSource1 != null && !loopAudioSource1.isPlaying)
+        {
+            loopAudioSource1.Play();
+        }
+        if (loopAudioSource2 != null && !loopAudioSource2.isPlaying)
+        {
+            loopAudioSource2.Play();
+        }
+
+        SetLightsColor(Color.blue);
+        SetBeamEmission(beamBlueColor);
     }
 }
