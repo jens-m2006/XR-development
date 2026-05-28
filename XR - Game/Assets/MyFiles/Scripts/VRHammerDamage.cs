@@ -1,15 +1,13 @@
 using UnityEngine;
+using System.Collections;
 
 public class VRHammerDamage : MonoBehaviour
 {
-    // This script is now purely a placeholder on your hammer head
-    // to confirm that the physics engine links the objects correctly.
-    // The actual hit detection is safely handled by BatteryController.cs using Triggers.
-
     private Transform rootTransform;
     private Transform rootOriginalParent;
     private Vector3 rootLocalPosition;
     private Quaternion rootLocalRotation;
+    private UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable grabInteractable;
 
     private void Awake()
     {
@@ -17,15 +15,16 @@ public class VRHammerDamage : MonoBehaviour
         rootOriginalParent = rootTransform.parent;
         rootLocalPosition = rootTransform.localPosition;
         rootLocalRotation = rootTransform.localRotation;
+
+        grabInteractable = GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
+        if (grabInteractable == null)
+            grabInteractable = rootTransform.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
     }
 
     private void Start()
     {
-        // Double check if the user assigned the tag correctly in the inspector
         if (!gameObject.CompareTag("Hammer"))
-        {
-            Debug.LogWarning("WARNING: " + gameObject.name + " is missing the 'Hammer' tag! Please assign it in the Inspector.");
-        }
+            Debug.LogWarning("WARNING: " + gameObject.name + " is missing the 'Hammer' tag!");
     }
 
     private void OnEnable()
@@ -40,17 +39,59 @@ public class VRHammerDamage : MonoBehaviour
 
     private void ResetHammerPosition()
     {
-        if (rootTransform == null) return;
+        StartCoroutine(ResetAfterRelease());
+    }
 
-        rootTransform.SetParent(rootOriginalParent);
-        rootTransform.localPosition = rootLocalPosition;
-        rootTransform.localRotation = rootLocalRotation;
+    private IEnumerator ResetAfterRelease()
+{
+    ReleaseAllGrabs();
 
-        Rigidbody rb = rootTransform.GetComponent<Rigidbody>();
-        if (rb != null)
+    // Wacht langer zodat XR toolkit volledig loslaat
+    yield return new WaitForSeconds(0.1f);
+
+    if (rootTransform == null) yield break;
+
+    // Disable grab tijdelijk zodat hij niet opnieuw gepakt kan worden tijdens reset
+    if (grabInteractable != null)
+        grabInteractable.enabled = false;
+
+    rootTransform.SetParent(rootOriginalParent);
+    rootTransform.localPosition = rootLocalPosition;
+    rootTransform.localRotation = rootLocalRotation;
+
+    Rigidbody rb = rootTransform.GetComponent<Rigidbody>();
+    if (rb != null)
+    {
+        rb.isKinematic = true;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = false;
+    }
+
+    // Wacht nog een frame dan grab weer aanzetten
+    yield return null;
+
+    if (grabInteractable != null)
+        grabInteractable.enabled = true;
+
+    Debug.Log("[HAMMER] Reset voltooid.");
+}
+    private void ReleaseAllGrabs()
+    {
+        if (grabInteractable == null) return;
+
+        var selectingInteractors = grabInteractable.interactorsSelecting;
+        if (selectingInteractors != null && selectingInteractors.Count > 0)
         {
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            var interactorsToRelease = new System.Collections.Generic.List<UnityEngine.XR.Interaction.Toolkit.Interactors.IXRSelectInteractor>(selectingInteractors);
+            foreach (var interactor in interactorsToRelease)
+            {
+                if (interactor != null && grabInteractable.interactionManager != null)
+                {
+                    grabInteractable.interactionManager.SelectExit(interactor, (UnityEngine.XR.Interaction.Toolkit.Interactables.IXRSelectInteractable)grabInteractable);
+                    Debug.Log($"[HAMMER] Force released grab from: {interactor}");
+                }
+            }
         }
     }
 }
