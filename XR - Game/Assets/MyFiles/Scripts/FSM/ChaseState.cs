@@ -7,7 +7,7 @@ public class ChaseState : State
     private float lostSightTimer = 0f;
     private float lostSightTimeout = 2f;
 
-    private float damagePerSecond = 10f;
+    private float damagePerSecond = 20f;
     private float damageTimer = 0f;
 
     public override void Enter()

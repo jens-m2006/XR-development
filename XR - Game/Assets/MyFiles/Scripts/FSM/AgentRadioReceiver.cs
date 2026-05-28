@@ -21,7 +21,7 @@ public class AgentRadioReceiver : MonoBehaviour
 
     private void OnAlertReceived(Vector3 location)
     {
-        // Alleen reageren als hij niet al aan het chasen is
+        if (agent.IsBatteryEmpty()) return;
         if (agent.GetCurrentStateName() == "ChaseState") return;
 
         agent.ChangeState(new InvestigateState(agent, location));

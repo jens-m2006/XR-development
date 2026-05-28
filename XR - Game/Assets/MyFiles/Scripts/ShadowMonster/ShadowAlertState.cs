@@ -4,7 +4,7 @@ public class ShadowAlertState : State
 {
     private ShadowMonsterAgent sAgent;
     private float alertTimer = 0f;
-    private float timerInterval = 5f; 
+    private float timerInterval = 2f; 
 
     public ShadowAlertState(ShadowMonsterAgent agent) : base(null) 
     { 
@@ -67,11 +67,18 @@ public class ShadowAlertState : State
         }
 
         // Pulse the location alarm message every 5 seconds
-        alertTimer += Time.deltaTime;
+       alertTimer += Time.deltaTime;
         if (alertTimer >= timerInterval)
         {
             TriggerAlarmAtPosition();
-            alertTimer = 0f; 
+            alertTimer = 0f;
+
+            // Stuur ook elke X seconden de locatie update naar de robot
+            if (sAgent.playerCamera != null)
+            {
+                ShadowMonsterAgent.OnShadowMonsterAlertTriggered?.Invoke(sAgent.playerCamera.position);
+                Debug.Log("[SHADOW_RADIO] Location update sent to Robot Drone!");
+            }
         }
 
         if (sAgent.IsPlayerLookingAtMe())

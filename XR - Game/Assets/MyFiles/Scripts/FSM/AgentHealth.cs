@@ -8,9 +8,14 @@ public class AgentHealth : MonoBehaviour
     public float maxHealth = 100f;
     private float currentHealth;
 
-    private void Start()
+    private void Awake()
     {
         currentHealth = maxHealth;
+        GameManager.OnLevelReset += ResetHealth;
+    }
+
+    private void Start()
+    {
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
     }
 
@@ -39,6 +44,12 @@ public class AgentHealth : MonoBehaviour
         }
     }
 
+    private void ResetHealth()
+    {
+        currentHealth = maxHealth;
+        OnHealthChanged?.Invoke(currentHealth, maxHealth);
+    }
+
     private float CalculateHammerDamage()
     {
         Agent agent = GetComponentInParent<Agent>();
@@ -63,5 +74,10 @@ public class AgentHealth : MonoBehaviour
     {
         GameManager.Instance.EndLevelWithWin(0);
         gameObject.SetActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.OnLevelReset -= ResetHealth;
     }
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
+using System.Threading;
 
 
 public class GameManager : MonoBehaviour
@@ -153,6 +154,7 @@ private System.Collections.IEnumerator SafeVRStartSequence()
         
         RenderVisibilityController.Instance.EnableMenu();
         RenderVisibilityController.Instance.DisableLevel();
+        
 
         OnMenuStarted?.Invoke();
         // Ensure SFX stops immediately when entering menu
@@ -167,7 +169,7 @@ private System.Collections.IEnumerator SafeVRStartSequence()
     {
         RenderVisibilityController.Instance.EnableLevel();
         RenderVisibilityController.Instance.DisableMenu();
-
+        
 
         OnLevelStarted?.Invoke();
         ApplyAudioState();

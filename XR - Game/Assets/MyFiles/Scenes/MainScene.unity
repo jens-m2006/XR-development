@@ -21158,8 +21158,8 @@ MonoBehaviour:
   - {fileID: 442022983}
   - {fileID: 1569037698}
   detectionRange: 10
-  damageRange: 2
-  viewDotThreshold: 0.3
+  damageRange: 4
+  viewDotThreshold: 0.4
   waypointDistance: 2
   checkpointDistance: 3
   maxBattery: 100
@@ -55256,8 +55256,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36b60167b4257114abfb88ee9e25654b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VRFlashlight
-  beamRange: 3.83
-  beamRadius: 1.65
+  beamRange: 2.51
+  beamRadius: 2.57
 --- !u!1 &1377217506
 GameObject:
   m_ObjectHideFlags: 0
@@ -56451,10 +56451,10 @@ Transform:
   - {fileID: 133991609}
   - {fileID: 1600773583}
   - {fileID: 1312940690}
-  - {fileID: 220314712}
   - {fileID: 455979766}
   - {fileID: 813768532}
   - {fileID: 598103962}
+  - {fileID: 220314712}
   - {fileID: 1517753484}
   m_Father: {fileID: 2037238112}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -62526,8 +62526,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShadowMonsterAgent
   playerCamera: {fileID: 1851386266}
-  stalkSpeed: 2
-  alertSpeed: 5
+  stalkSpeed: 1.35
+  alertSpeed: 3.88
   alertRange: 6
   stopDistance: 2
   lookThreshold: 0.7

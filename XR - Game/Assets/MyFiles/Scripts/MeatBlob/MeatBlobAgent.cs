@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class MeatBlobAgent : MonoBehaviour
@@ -11,6 +12,10 @@ public class MeatBlobAgent : MonoBehaviour
     public float roamSpeed = 1f;
     public float enragedSpeed = 4f;
     public float lungeRange = 3f;
+
+    private float enrageDuration = 30f;
+    private float enrageTimer = 0f;
+    private Coroutine enrageCoroutine;
 
     private Vector3 startPosition;
     private Quaternion startRotation;
@@ -85,22 +90,7 @@ public class MeatBlobAgent : MonoBehaviour
         if (currentState != null) currentState.Enter();
     }
 
-    private void GoEnraged()
-    {
-        if (isEnraged) return; 
-
-        isEnraged = true;
-        navAgent.speed = enragedSpeed;
-        lungeRange *= 1.5f; // When enraged, the blob can lunge from further away!
-        
-        Debug.Log("MEATBLOB: A battery broke! The blob is now ENRAGED!");
-        
-        // Only force a state switch if we are not already dead/lunging
-        if (!isLunging)
-        {
-            ChangeState(new BlobRoamState(this)); 
-        }
-    }
+    
 
     private void OnDestroy()
     {
@@ -113,6 +103,13 @@ public class MeatBlobAgent : MonoBehaviour
         isEnraged = false;
         lungeRange = startLungeRange;
         isLunging = false;
+        enrageTimer = 0f;
+
+        if (enrageCoroutine != null)
+        {
+            StopCoroutine(enrageCoroutine);
+            enrageCoroutine = null;
+        }
 
         if (navAgent != null)
         {
@@ -131,5 +128,51 @@ public class MeatBlobAgent : MonoBehaviour
         transform.position = startPosition;
         transform.rotation = startRotation;
         ChangeState(new BlobRoamState(this));
+    }
+
+    private void GoEnraged()
+{
+    enrageTimer += enrageDuration; // stapel seconden op bij meerdere invokes
+
+    if (!isEnraged)
+    {
+        isEnraged = true;
+        navAgent.speed = enragedSpeed;
+        lungeRange *= 1.5f;
+        Debug.Log("MEATBLOB: Enraged!");
+
+        if (!isLunging)
+            ChangeState(new BlobRoamState(this));
+    }
+    else
+    {
+        Debug.Log($"MEATBLOB: Extra invoke! Timer opgehoogd naar {enrageTimer}s");
+    }
+
+    // Stop vorige coroutine en start opnieuw met nieuwe timer
+    if (enrageCoroutine != null)
+        StopCoroutine(enrageCoroutine);
+
+    enrageCoroutine = StartCoroutine(EnrageCountdown());
+}
+
+    private IEnumerator EnrageCountdown()
+    {
+        while (enrageTimer > 0f)
+        {
+            yield return null;
+            enrageTimer -= Time.deltaTime;
+        }
+
+        // Terug naar normaal
+        isEnraged = false;
+        navAgent.speed = roamSpeed;
+        lungeRange = startLungeRange;
+        enrageCoroutine = null;
+
+        Debug.Log("MEATBLOB: Enrage voorbij, terug naar normaal.");
+
+        if (!isLunging)
+            ChangeState(new BlobRoamState(this));
     }
 }

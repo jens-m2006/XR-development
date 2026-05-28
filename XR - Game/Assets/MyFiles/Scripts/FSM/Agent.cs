@@ -26,6 +26,14 @@ public class Agent : MonoBehaviour
     private int currentWaypointIndex = 0;
     private float chaseTimer = 0f;
 
+    public float defaultSpeed = 3.5f; // zelfde waarde als je NavMeshAgent speed in Inspector
+
+// Voeg deze methode toe:
+    public void SetSpeed(float speed)
+    {
+        GetComponent<UnityEngine.AI.NavMeshAgent>().speed = speed;
+    }
+
 
 
     // start------------
