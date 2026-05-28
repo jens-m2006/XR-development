@@ -150,6 +150,10 @@ private System.Collections.IEnumerator SafeVRStartSequence()
  
     private void EnterMenuState()
     {
+        
+        RenderVisibilityController.Instance.EnableMenu();
+        RenderVisibilityController.Instance.DisableLevel();
+
         OnMenuStarted?.Invoke();
         // Ensure SFX stops immediately when entering menu
         if (AudioManager.Instance != null)
@@ -161,6 +165,10 @@ private System.Collections.IEnumerator SafeVRStartSequence()
 
     private void EnterLevelPlayState()
     {
+        RenderVisibilityController.Instance.EnableLevel();
+        RenderVisibilityController.Instance.DisableMenu();
+
+
         OnLevelStarted?.Invoke();
         ApplyAudioState();
         

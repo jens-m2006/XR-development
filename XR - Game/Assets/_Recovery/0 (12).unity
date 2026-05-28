@@ -9178,10 +9178,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce67877c3581dba4eb3ba45f7b8d739d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RenderVisibilityController
-  levelObjects:
-  - {fileID: 908816505}
-  menuObjects:
-  - {fileID: 225740471}
+  levelObjects: []
+  menuObjects: []
 --- !u!1 &222272944
 GameObject:
   m_ObjectHideFlags: 0
@@ -13329,7 +13327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2528cf2ff3868aa498468858c689053b, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20254,7 +20252,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 254469c41704e4f47bd9a79ba550f9b5, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2152091341866621336, guid: 254469c41704e4f47bd9a79ba550f9b5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -58782,7 +58780,7 @@ RectTransform:
   m_Father: {fileID: 186553365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.316, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -61073,16 +61071,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AutomaticObjectCuller
   safeDistance: 6
-  checksPerSecond: 5
   targetsToManage:
   - {fileID: 523586821}
   - {fileID: 1362066004}
   - {fileID: 1351809645}
   - {fileID: 29839808}
-  enemyTargets:
-  - {fileID: 524891473}
-  - {fileID: 1958466497}
-  - {fileID: 1545851187}
 --- !u!1 &1520214378
 GameObject:
   m_ObjectHideFlags: 0
@@ -82213,10 +82206,6 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 8e9ad29aeb49c074f955452e49365d84, type: 2}
-    - target: {fileID: -1853094968961178454, guid: 766accc08353cae4facc1a7336cbf0e8, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: -797328469399398019, guid: 766accc08353cae4facc1a7336cbf0e8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -82276,7 +82265,6 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 5050422055867433376, guid: 766accc08353cae4facc1a7336cbf0e8, type: 3}
-    - {fileID: 65702495048144492, guid: 766accc08353cae4facc1a7336cbf0e8, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 766accc08353cae4facc1a7336cbf0e8, type: 3}
