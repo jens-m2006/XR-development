@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     public static event Action OnLevelReset;
     public static event Action OnStatsUpdated;
 
+    public AudioClip winSound;
+    public AudioClip loseSound;
+
     public static GameManager Instance { get; private set; }
 
     public enum GameState { Menu, LevelPlay }
@@ -129,6 +132,8 @@ private System.Collections.IEnumerator SafeVRStartSequence()
                 Debug.Log("New High Score!");
             }
 
+            AudioManager.Instance.PlaySFX(winSound,true);
+
             SaveStats(); // Save changes immediately
             ResetLevelObjects();
             UpdateState(GameState.Menu);
@@ -142,7 +147,7 @@ private System.Collections.IEnumerator SafeVRStartSequence()
         {
             lastScore = scoreAchieved;
             totalLosses++;
-
+            AudioManager.Instance.PlaySFX(loseSound,true);
             SaveStats(); // Save changes immediately
             ResetLevelObjects();
             UpdateState(GameState.Menu);

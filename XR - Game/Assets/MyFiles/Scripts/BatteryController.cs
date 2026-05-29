@@ -142,6 +142,7 @@ public class BatteryController : MonoBehaviour
     private IEnumerator ExplosionAndDisableSequence()
     {
         isBroken = true;
+        Player.Instance.TakeDamage(10);
         // Fire the signal so the listening MeatBlob goes enraged
         OnAnyBatteryBroken?.Invoke();
         OnAnyBatteryBroken1?.Invoke(this);

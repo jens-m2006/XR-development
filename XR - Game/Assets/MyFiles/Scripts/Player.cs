@@ -71,7 +71,10 @@ public class Player : MonoBehaviour
 
     public void ReceiveHealth(float health)
     {
-        // Je kunt hier eventueel later heling inbouwen
+        currentHealth += health;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+        OnHealthChanged?.Invoke(currentHealth, maxHealth);
     }
 
     private void Die()

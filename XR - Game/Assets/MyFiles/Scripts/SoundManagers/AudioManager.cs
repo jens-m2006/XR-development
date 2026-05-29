@@ -157,10 +157,10 @@ public class AudioManager : MonoBehaviour
             else src.Pause();
         }
 
-        if (!shouldAllow && oneShotSource != null && oneShotSource.isPlaying)
-        {
-            oneShotSource.Stop();
-        }
+        // if (!shouldAllow && oneShotSource != null && oneShotSource.isPlaying)
+        // {
+        //     oneShotSource.Stop();
+        // }
     }
 
     public void PlayMusic(AudioClip clip)
@@ -231,6 +231,17 @@ public class AudioManager : MonoBehaviour
     public void PlaySFX(AudioClip clip)
     {
         if (!sfxEnabled || !allowSfxPlayback || clip == null) return;
+        oneShotSource.PlayOneShot(clip, sfxVolume);
+    }
+
+    public void PlaySFX(AudioClip clip, bool overrideAllowState)
+    {
+        // Als SFX in de settings uitstaat, mag er NOOIT iets spelen
+        if (!sfxEnabled || clip == null) return;
+
+        // Als override true is, negeren we de allowSfxPlayback controle
+        if (!overrideAllowState && !allowSfxPlayback) return;
+
         oneShotSource.PlayOneShot(clip, sfxVolume);
     }
 
