@@ -1,0 +1,11 @@
+Model Information:
+* title:	Paging speaker
+* source:	https://sketchfab.com/3d-models/paging-speaker-fe79c69dd27e4caab8aa79cbd0ed588f
+* author:	Sousinho (https://sketchfab.com/sousinho)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Paging speaker" (https://sketchfab.com/3d-models/paging-speaker-fe79c69dd27e4caab8aa79cbd0ed588f) by Sousinho (https://sketchfab.com/sousinho) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
